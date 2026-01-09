@@ -3,10 +3,11 @@ import { PrismaModule } from './providers/prisma/prisma.module';
 import { ConfigModule } from '@nestjs/config';
 import { EventEmitterModule } from '@nestjs/event-emitter';
 import { BullModule } from '@nestjs/bullmq';
-import { EmailModule } from './jobs/queues/email/email.module';
 import { AuthModule } from './modules/auth/auth.module';
 import { NotificationEventHanlder } from './providers/notification/notification.event.handler';
 import { DiscordNotificationProvider } from './providers/notification/discord.notification.provider';
+import { GraphQLModule } from '@nestjs/graphql';
+import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 
 @Module({
   imports: [
@@ -21,9 +22,13 @@ import { DiscordNotificationProvider } from './providers/notification/discord.no
       },
     }),
     EventEmitterModule.forRoot(),
-    EmailModule,
     PrismaModule,
     AuthModule,
+    GraphQLModule.forRoot<ApolloDriverConfig>({
+      driver: ApolloDriver,
+      autoSchemaFile: true,
+      sortSchema: true,
+    }),
   ],
   controllers: [],
   providers: [
