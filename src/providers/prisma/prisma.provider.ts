@@ -15,17 +15,22 @@ export class PrismaProvider
 
   constructor() {
     super({
-      log: ['query', 'info', 'warn', 'error'],
+      log:
+        process.env.NODE_ENV === 'development'
+          ? ['query', 'info', 'warn', 'error']
+          : ['warn', 'error'],
     });
   }
 
   async onModuleInit() {
     await this.$connect();
-    this.logger.log('✅ Prisma connected!');
+    process.env.NODE_ENV === 'development' &&
+      this.logger.log('✅ Prisma connected!');
   }
 
   async onModuleDestroy() {
     await this.$disconnect();
-    this.logger.error('❌ Prisma disconnected!');
+    process.env.NODE_ENV === 'development' &&
+      this.logger.error('❌ Prisma disconnected!');
   }
 }

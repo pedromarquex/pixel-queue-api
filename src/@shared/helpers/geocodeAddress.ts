@@ -22,13 +22,9 @@ export async function geocodeAddress(
         longitude: location.lng.toString(),
       };
     } else {
-      console.warn(
-        '[geocodeAddress] Nenhum resultado encontrado para o endereço.',
-      );
       throw new Error('Endereço não encontrado');
     }
   } catch (error) {
-    console.error('[geocodeAddress] Erro ao buscar coordenadas:', error);
     throw error;
   }
 }

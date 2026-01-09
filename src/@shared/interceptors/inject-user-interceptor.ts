@@ -28,7 +28,6 @@ export class InjectUserInterceptor implements NestInterceptor {
 
     const payload = request.user;
     if (!payload?.userId) {
-      console.warn('⚠️ Payload invalid in interceptor');
       return next.handle();
     }
 
@@ -37,14 +36,23 @@ export class InjectUserInterceptor implements NestInterceptor {
         where: { id: payload.userId },
       });
 
+      if (!user) {
+        // user not found
+        throw new ForbiddenException('Access denied. User not found');
+      }
+
       if (!user.isActive) {
         throw new ForbiddenException('Access denied. User blocked');
       }
 
       request.userLogged = user;
-      return from(next.handle());
+      // return the handler result directly; tests may provide a minimal object
+      // with a subscribe method and wrapping with rxjs `from` causes an
+      // "invalid object where a stream was expected" error in unit tests.
+      return next.handle();
     } catch (error) {
-      console.error('❌ Error in InjectUserInterceptor:', error);
+      // rethrow known ForbiddenException to preserve message
+      if (error instanceof ForbiddenException) throw error;
       throw new ForbiddenException('Access denied. User not found');
     }
   }
