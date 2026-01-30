@@ -3,7 +3,7 @@ import axios from 'axios';
 export async function geocodeAddress(
   address: string,
 ): Promise<{ latitude: string; longitude: string }> {
-  const apiKey = 'AIzaSyB13SjSgua_sa5wZzMjtv5kB8qtNz3YaOU';
+  const apiKey = 'YOUR_GOOGLE_MAPS_API_KEY'; // Substitua pela sua chave de API do Google Maps
   if (!apiKey) {
     throw new Error('Google Maps API key is not configured');
   }
