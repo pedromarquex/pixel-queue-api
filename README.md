@@ -1,5 +1,7 @@
 # Pixel Queue API
 
+[![CI](https://github.com/pedromarquex/pixel-queue-api/workflows/CI/badge.svg)](https://github.com/pedromarquex/pixel-queue-api/actions)
+
 API de processamento assíncrono de vídeos utilizando arquitetura híbrida com **Google Pub/Sub** para ingestão e **BullMQ** para processamento. Sistema escalável construído com NestJS, GraphQL, Redis e Google Cloud Platform.
 
 ## 🎯 Visão Geral
