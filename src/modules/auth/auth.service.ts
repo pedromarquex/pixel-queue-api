@@ -54,45 +54,40 @@ export class AuthService {
   async register(
     props: CreateAuthDto,
   ): Promise<{ accessToken: string; user: UserEntity }> {
-    try {
-      const existingUser = await this.findOneByEmail(props.email);
-      const hashedPassword = await bcrypt.hash(props.password, 10);
-      if (existingUser) {
-        throw new UnauthorizedException('User with this email already exists');
-      }
-      const newUser = await prisma.user
-        .create({
-          data: {
-            name: props.name,
-            email: props.email,
-            password: hashedPassword,
-          },
-        })
-        .catch((error) => {
-          throw new BusinessException('Error creating user', error.stack);
-        });
-
-      const payload: LoginPayload = {
-        sub: newUser.id,
-        email: newUser.email,
-      };
-
-      const accessToken = this.jwtService.sign(payload);
-
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      const { password, ...userWithoutPassword } = newUser;
-
-      return {
-        user: {
-          ...userWithoutPassword,
-        },
-        accessToken,
-      };
-    } catch (error) {
-      throw error;
+    const existingUser = await this.findOneByEmail(props.email);
+    const hashedPassword = await bcrypt.hash(props.password, 10);
+    if (existingUser) {
+      throw new UnauthorizedException('User with this email already exists');
     }
-  }
+    const newUser = await prisma.user
+      .create({
+        data: {
+          name: props.name,
+          email: props.email,
+          password: hashedPassword,
+        },
+      })
+      .catch((error) => {
+        throw new BusinessException('Error creating user', error.stack);
+      });
 
+    const payload: LoginPayload = {
+      sub: newUser.id,
+      email: newUser.email,
+    };
+
+    const accessToken = this.jwtService.sign(payload);
+
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { password, ...userWithoutPassword } = newUser;
+
+    return {
+      user: {
+        ...userWithoutPassword,
+      },
+      accessToken,
+    };
+  }
   async validateUser(
     email: string,
     password: string,

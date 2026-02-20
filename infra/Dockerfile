@@ -12,9 +12,7 @@ RUN yarn install
 
 COPY . .
 
-RUN yarn build
-
-RUN chmod +x infra/entrypoint.sh
+RUN yarn build; chmod +x infra/entrypoint.sh
 
 ENV PATH=$PATH:/app/node_modules/.bin/
 

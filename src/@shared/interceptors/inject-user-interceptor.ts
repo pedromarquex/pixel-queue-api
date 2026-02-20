@@ -5,7 +5,7 @@ import {
   CallHandler,
   ForbiddenException,
 } from '@nestjs/common';
-import { Observable, from } from 'rxjs';
+import { Observable } from 'rxjs';
 import { PrismaProvider } from '../../providers/prisma/prisma.provider';
 
 @Injectable()
@@ -19,11 +19,9 @@ export class InjectUserInterceptor implements NestInterceptor {
     const request = context.switchToHttp().getRequest();
     const currentRoute = request.route?.path ?? '';
 
-    const routesPublicByPassInterptor = ['/auth/login', '/auth/register'];
+    const routesPublicByPassInterceptor = ['/auth/login', '/auth/register'];
 
-    const shouldBypass = routesPublicByPassInterptor.some(
-      (route) => route === currentRoute,
-    );
+    const shouldBypass = routesPublicByPassInterceptor.includes(currentRoute);
     if (shouldBypass) return next.handle();
 
     const payload = request.user;

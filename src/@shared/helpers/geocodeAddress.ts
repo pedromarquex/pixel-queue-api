@@ -11,20 +11,16 @@ export async function geocodeAddress(
   const encodedAddress = encodeURIComponent(address);
   const url = `https://maps.googleapis.com/maps/api/geocode/json?address=${encodedAddress}&key=${apiKey}`;
 
-  try {
-    const response = await axios.get(url);
-    const results = response.data.results;
+  const response = await axios.get(url);
+  const results = response.data.results;
 
-    if (results && results.length > 0) {
-      const location = results[0].geometry.location;
-      return {
-        latitude: location.lat.toString(),
-        longitude: location.lng.toString(),
-      };
-    } else {
-      throw new Error('Endereço não encontrado');
-    }
-  } catch (error) {
-    throw error;
+  if (results && results.length > 0) {
+    const location = results[0].geometry.location;
+    return {
+      latitude: location.lat.toString(),
+      longitude: location.lng.toString(),
+    };
+  } else {
+    throw new Error('Endereço não encontrado');
   }
 }

@@ -40,7 +40,7 @@ export class AuthResolver {
   async me(@Context() ctx: any) {
     const req = ctx.req;
     const auth = req.user;
-    if (!auth || !auth.userId) return null;
+    if (!auth?.userId) return null;
     const user = await this.prisma.user.findUnique({
       where: { id: auth.userId },
     });
