@@ -11,9 +11,8 @@ export class DiscordNotificationProvider {
         content,
       });
     } catch (error) {
-      console.error(
-        'Erro ao enviar notificação para o Discord:',
-        error.message,
+      throw new Error(
+        `Failed to send notification to Discord: ${error.message}`,
       );
     }
   }

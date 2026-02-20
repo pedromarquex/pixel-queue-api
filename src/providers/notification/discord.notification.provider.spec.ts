@@ -13,9 +13,9 @@ describe('DiscordNotificationProvider', () => {
     expect(axios.post).toHaveBeenCalled();
   });
 
-  test('handle catches errors and does not throw', async () => {
+  test('handle throw error', async () => {
     (axios.post as jest.Mock).mockRejectedValue(new Error('bad'));
     const p = new DiscordNotificationProvider();
-    await expect(p.handle('x')).resolves.toBeUndefined();
+    await expect(p.handle('x')).rejects.toThrow(Error);
   });
 });
