@@ -28,10 +28,14 @@ export class AuthResolver {
   @Query(() => [UserType])
   async users() {
     const users = await this.prisma.user.findMany();
-    return users.map((u) => {
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      const { password, ...rest } = u;
-      return rest;
+    return users.map((user) => {
+      return {
+        id: user.id,
+        email: user.email,
+        name: user.name,
+        isActive: user.isActive,
+        createdAt: user.createdAt,
+      };
     });
   }
 
@@ -44,8 +48,12 @@ export class AuthResolver {
     const user = await this.prisma.user.findUnique({
       where: { id: auth.userId },
     });
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const { password, ...rest } = user as any;
-    return rest;
+    return {
+      id: user.id,
+      email: user.email,
+      name: user.name,
+      isActive: user.isActive,
+      createdAt: user.createdAt,
+    };
   }
 }
